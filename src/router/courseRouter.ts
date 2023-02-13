@@ -1,11 +1,17 @@
 import express from "express"
 import { CourseController } from "../controller/CourseController"
+import { CourseDTO } from "../dtos/CourseDTO"
+import { CourseBusiness } from "../business/CourseBusiness"
+import { CourseDatabase } from "../database/CourseDatabase"
 
 export const courseRouter = express.Router()
 
-const courseController = new CourseController()
+const controller = new CourseController(
+    new CourseDTO(),
+    new CourseBusiness(new CourseDTO(),new CourseDatabase())
+)
 
-courseRouter.get("/", courseController.getCourses)
-courseRouter.post("/", courseController.createCourse)
-courseRouter.put("/:id", courseController.editCourse)
-courseRouter.delete("/:id", courseController.deleteCourse)
+courseRouter.get("/", controller.getCourses)
+courseRouter.post("/", controller.createCourse)
+courseRouter.put("/:id", controller.editCourse)
+courseRouter.delete("/:id", controller.deleteCourse)
